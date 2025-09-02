@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for Algolia DynamoDB table'
+
+Parameters:
+  Env:
+    Type: String
+    Default: prd
+    Description: Environment name for the resources
+
+Resources:
+  AlgoliaTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: AlgoliaTable
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+      TimeToLiveSpecification:
+        AttributeName: TTL
+        Enabled: true
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      DeletionProtectionEnabled: true
+      Tags:
+        - Key: Name
+          Value: AlgoliaTable
+        - Key: Environment
+          Value: !Ref Env
+
+Outputs:
+  TableName:
+    Description: Name of the DynamoDB table
+    Value: !Ref AlgoliaTable
+    Export:
+      Name: !Sub '${AWS::StackName}-AlgoliaTableName'
+  TableArn:
+    Description: ARN of the DynamoDB table
+    Value: !GetAtt AlgoliaTable.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-AlgoliaTableArn'
