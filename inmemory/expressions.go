@@ -175,6 +175,7 @@ func (s *Searcher) compareEqual(v1, v2 interface{}) bool {
 }
 
 // toFloat64 attempts to convert a value to float64.
+// Returns the converted value and a boolean indicating success.
 func toFloat64(v interface{}) (float64, bool) {
 	switch val := v.(type) {
 	case float64:
