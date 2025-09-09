@@ -10,13 +10,14 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.31.7
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.20.10
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.50.2
+	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.39.3
 	github.com/cockroachdb/errors v1.12.0
 	github.com/segmentio/ksuid v1.0.4
 	github.com/urfave/cli/v2 v2.27.7
 )
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.39.0 // indirect
+	github.com/aws/aws-sdk-go-v2 v1.39.0
 	github.com/aws/aws-sdk-go-v2/credentials v1.18.11 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.7 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.7 // indirect
@@ -29,8 +30,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sso v1.29.2 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.34.3 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.38.3 // indirect
-	go.opentelemetry.io/otel v1.38.0
-	go.opentelemetry.io/otel/trace v1.38.0
 	github.com/aws/smithy-go v1.23.0 // indirect
 	github.com/cockroachdb/logtags v0.0.0-20241215232642-bb51bb14a506 // indirect
 	github.com/cockroachdb/redact v1.1.6 // indirect
@@ -46,7 +45,9 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/xrash/smetrics v0.0.0-20250705151800-55b8f293f342 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
+	go.opentelemetry.io/otel v1.38.0
 	go.opentelemetry.io/otel/metric v1.38.0 // indirect
+	go.opentelemetry.io/otel/trace v1.38.0
 	golang.org/x/sys v0.36.0 // indirect
 	golang.org/x/text v0.29.0 // indirect
 )

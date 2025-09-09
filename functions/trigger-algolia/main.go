@@ -6,6 +6,8 @@ import (
 	"os"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
 	"github.com/letmevibethatforyou/searchx/algolia"
 	"github.com/letmevibethatforyou/searchx/internal/ddb"
 	"github.com/urfave/cli/v2"
@@ -121,6 +123,11 @@ func main() {
 				Required: true,
 			},
 			&cli.StringFlag{
+				Name:    "env",
+				Usage:   "Environment name for AWS Secrets Manager (takes precedence over API key/ID flags)",
+				EnvVars: []string{"ENV", "ENVIRONMENT"},
+			},
+			&cli.StringFlag{
 				Name:    "algolia-app-id",
 				Usage:   "Algolia application ID",
 				EnvVars: []string{"ALGOLIA_APP_ID"},
@@ -143,15 +150,33 @@ func main() {
 func runAction(c *cli.Context) error {
 	ctx := c.Context
 	tableName := c.String("table-name")
+	env := c.String("env")
 	algoliaAppID := c.String("algolia-app-id")
 	algoliaAPIKey := c.String("algolia-api-key")
 
-	slog.InfoContext(ctx, "Starting DynamoDB to Algolia sync", "table", tableName)
+	slog.InfoContext(ctx, "Starting DynamoDB to Algolia sync", "table", tableName, "environment", env)
 
 	var fetchSecrets algolia.FetchSecrets
-	if algoliaAppID != "" && algoliaAPIKey != "" {
+
+	// Prioritize environment-based AWS Secrets Manager if env is provided
+	if env != "" {
+		slog.InfoContext(ctx, "Using AWS Secrets Manager for credentials", "environment", env)
+
+		// Load AWS config
+		cfg, err := config.LoadDefaultConfig(ctx)
+		if err != nil {
+			slog.ErrorContext(ctx, "Failed to load AWS config", "error", err)
+			return err
+		}
+
+		// Create Secrets Manager client
+		client := secretsmanager.NewFromConfig(cfg)
+		fetchSecrets = algolia.AWSSecrets(ctx, client, env)
+	} else if algoliaAppID != "" && algoliaAPIKey != "" {
+		slog.InfoContext(ctx, "Using static credentials from flags")
 		fetchSecrets = algolia.StaticSecrets(algoliaAppID, algoliaAPIKey)
 	} else {
+		slog.InfoContext(ctx, "Using environment variables for credentials")
 		fetchSecrets = algolia.EnvSecrets()
 	}
 
@@ -161,8 +186,7 @@ func runAction(c *cli.Context) error {
 		slog.InfoContext(ctx, "Running in Lambda environment")
 		lambda.Start(handler.HandleDynamoDBEvent)
 	} else {
-		slog.InfoContext(ctx, "Running in CLI mode")
-		lambda.Start(handler.HandleDynamoDBEvent)
+		slog.InfoContext(ctx, "Function cannot run outside of AWS Lambda environment")
 	}
 
 	return nil
