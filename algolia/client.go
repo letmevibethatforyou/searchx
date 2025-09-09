@@ -13,9 +13,9 @@ import (
 // Secrets holds the Algolia application credentials.
 type Secrets struct {
 	// AppID is the Algolia application ID.
-	AppID string
+	AppID string `json:"app_id"`
 	// WriteApiKey is the Algolia write API key.
-	WriteApiKey string
+	WriteApiKey string `json:"write_api_key"`
 }
 
 // FetchSecrets is a function type that retrieves Algolia credentials.
