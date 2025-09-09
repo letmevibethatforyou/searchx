@@ -10,6 +10,17 @@ github.com/aws/aws-sdk-go-v2/service/dynamodb v1.50.2 h1:oQT34UrvH3ZyaRZsIuoPcpl
 github.com/aws/aws-sdk-go-v2/service/dynamodb v1.50.2/go.mod h1:lXFSTFpnhgc8Qb/meseIt7+UXPiidZm0DbiDqmPHBTQ=
 github.com/aws/aws-sdk-go-v2/service/dynamodbstreams v1.30.3 h1:PzpsyOIL1x5qavjDqAwaZtHdKvoKG9nFudwGq9suNME=
 github.com/aws/aws-sdk-go-v2/service/dynamodbstreams v1.30.3/go.mod h1:w5NSZOQrrHGt2jCC7tnNzlBWLHZB8xLUcApfiAxsxxM=
+github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.1 h1:oegbebPEMA/1Jny7kvwejowCaHz1FWZAQ94WXFNCyTM=
+github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.1/go.mod h1:kemo5Myr9ac0U9JfSjMo9yHLtw+pECEHsFtJ9tqCEI8=
+github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.11.7 h1:VN9u746Erhm6xnVSmaUd1Saxs1MVZVum6v2yPOqj8xQ=
+github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.11.7/go.mod h1:j0BhJWTdVsYsllEfO0E8EXtLToU8U7QeA7Gztxrl/8g=
+github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.7 h1:mLgc5QIgOy26qyh5bvW+nDoAppxgn3J2WV3m9ewq7+8=
+github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.7/go.mod h1:wXb/eQnqt8mDQIQTTmcw58B5mYGxzLGZGK8PWNFZ0BA=
+github.com/aws/aws-sdk-go-v2/service/sso v1.29.2 h1:rcoTaYOhGE/zfxE1uR6X5fvj+uKkqeCNRE0rBbiQM34=
+github.com/aws/aws-sdk-go-v2/service/sso v1.29.2/go.mod h1:Ql6jE9kyyWI5JHn+61UT/Y5Z0oyVJGmgmJbZD5g4unY=
+github.com/aws/aws-sdk-go-v2/service/ssooidc v1.34.3 h1:BSIfeFtU9tlSt8vEYS7KzurMoAuYzYPWhcZiMtxVf2M=
+github.com/aws/aws-sdk-go-v2/service/ssooidc v1.34.3/go.mod h1:XclEty74bsGBCr1s0VSaA11hQ4ZidK4viWK7rRfO88I=
+github.com/aws/aws-sdk-go-v2/service/sts v1.38.3 h1:yEiZ0ztgji2GsCb/6uQSITXcGdtmWMfLRys0jJFiUkc=
 github.com/aws/smithy-go v1.23.0 h1:8n6I3gXzWJB2DxBDnfxgBaSX6oe0d/t10qGz7OKqMCE=
 github.com/aws/smithy-go v1.23.0/go.mod h1:t1ufH5HMublsJYulve2RKmHDC15xu1f26kHCp/HgceI=
 github.com/cockroachdb/errors v1.12.0 h1:d7oCs6vuIMUQRVbi6jWWWEJZahLCfJpnJSVobd1/sUo=
@@ -55,6 +66,8 @@ github.com/rogpeppe/go-internal v1.14.1 h1:UQB4HGPB6osV0SQTLymcB4TgvyWu6ZyliaW0t
 github.com/rogpeppe/go-internal v1.14.1/go.mod h1:MaRKkUm5W0goXpeCfT7UZI6fk/L7L7so1lCWt35ZSgc=
 github.com/russross/blackfriday/v2 v2.1.0 h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf35Ld67mk=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
+github.com/segmentio/ksuid v1.0.4 h1:sBo2BdShXjmcugAMwjugoGUdUV0pcxY5mW4xKRn3v4c=
+github.com/segmentio/ksuid v1.0.4/go.mod h1:/XUiZBD3kVx5SmUOl55voK5yeAbBNNIed+2O73XgrPE=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5cxcmMvtA=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
