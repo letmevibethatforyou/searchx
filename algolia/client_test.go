@@ -1,4 +1,4 @@
-package algoliaassearch
+package algolia
 
 import (
 	"context"

@@ -1,5 +1,5 @@
 // Package algoliaassearch provides a lazy-loading Algolia search client with configurable secret management.
-package algoliaassearch
+package algolia
 
 import (
 	"context"

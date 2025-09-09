@@ -6,18 +6,18 @@ import (
 	"os"
 
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/letmevibethatforyou/searchx/internal/algoliaassearch"
+	"github.com/letmevibethatforyou/searchx/algolia"
 	"github.com/letmevibethatforyou/searchx/internal/ddb"
 	"github.com/urfave/cli/v2"
 )
 
 type Handler struct {
 	tableName     string
-	algoliaClient *algoliaassearch.Client
+	algoliaClient *algolia.Client
 }
 
-func NewHandler(tableName string, fetchSecrets algoliaassearch.FetchSecrets) *Handler {
-	algoliaClient := algoliaassearch.NewClient(fetchSecrets)
+func NewHandler(tableName string, fetchSecrets algolia.FetchSecrets) *Handler {
+	algoliaClient := algolia.NewClient(fetchSecrets)
 
 	return &Handler{
 		tableName:     tableName,
@@ -148,11 +148,11 @@ func runAction(c *cli.Context) error {
 
 	slog.InfoContext(ctx, "Starting DynamoDB to Algolia sync", "table", tableName)
 
-	var fetchSecrets algoliaassearch.FetchSecrets
+	var fetchSecrets algolia.FetchSecrets
 	if algoliaAppID != "" && algoliaAPIKey != "" {
-		fetchSecrets = algoliaassearch.StaticSecrets(algoliaAppID, algoliaAPIKey)
+		fetchSecrets = algolia.StaticSecrets(algoliaAppID, algoliaAPIKey)
 	} else {
-		fetchSecrets = algoliaassearch.EnvSecrets()
+		fetchSecrets = algolia.EnvSecrets()
 	}
 
 	handler := NewHandler(tableName, fetchSecrets)
