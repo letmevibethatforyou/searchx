@@ -225,7 +225,7 @@ upload_artifacts() {
   {
     "ParameterKey": "Version",
     "ParameterValue": "${version}"
-  }
+  },
   {
     "ParameterKey": "Env",
     "ParameterValue": "${env}"
