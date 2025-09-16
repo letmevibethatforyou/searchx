@@ -60,7 +60,8 @@ jobs:
 
     - name: Deploy to AWS
       env:
-        S3_ARTIFACT_BUCKET: ${{ secrets.S3_ARTIFACT_BUCKET }}
-        ENV: ${{ secrets.ENV }}
+        ALGOLIA_SECRET_ARN: ${{ secrets.ALGOLIA_SECRET_ARN }}
         AWS_REGION: ${{ secrets.AWS_REGION }}
+        ENV: ${{ secrets.ENV }}
+        S3_ARTIFACT_BUCKET: ${{ secrets.S3_ARTIFACT_BUCKET }}
       run: ./scripts/deploy.sh

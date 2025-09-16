@@ -229,6 +229,10 @@ upload_artifacts() {
   {
     "ParameterKey": "Env",
     "ParameterValue": "${env}"
+  },
+  {
+    "ParameterKey": "AlgoliaSecretArn",
+    "ParameterValue": "${ALGOLIA_SECRET_ARN:=}"
   }
 ]
 EOF
