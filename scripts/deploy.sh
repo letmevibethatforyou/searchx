@@ -124,15 +124,20 @@ generate_version() {
         return
     fi
 
-    # Generate version from timestamp and git hash
-    TIMESTAMP=$(date +%Y%m%d%H%M%S)
+    # Use GitHub run number if available, otherwise fallback to timestamp
+    if [ -n "${GITHUB_RUN_NUMBER:-}" ]; then
+        VERSION_PREFIX="${GITHUB_RUN_NUMBER}"
+    else
+        VERSION_PREFIX=$(date +%Y%m%d%H%M%S)
+    fi
+
     if command -v git &> /dev/null && [ -d .git ]; then
         GIT_HASH=$(git rev-parse --short HEAD 2>/dev/null || echo "nogit")
     else
         GIT_HASH="nogit"
     fi
 
-    echo "${TIMESTAMP}.${GIT_HASH}"
+    echo "${VERSION_PREFIX}.${GIT_HASH}"
 }
 
 build_lambda() {
@@ -189,11 +194,13 @@ upload_artifacts() {
     # Get repository name from current directory or git
     if command -v git &> /dev/null && [ -d .git ]; then
         REPO_NAME=$(basename "$(git rev-parse --show-toplevel)")
+        BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
     else
         REPO_NAME=$(basename "$(pwd)")
+        BRANCH_NAME="unknown"
     fi
 
-    S3_PREFIX="/${REPO_NAME}/${version}"
+    S3_PREFIX="${REPO_NAME}/${BRANCH_NAME}/${version}"
 
     log_info "S3 prefix: $S3_PREFIX"
 
