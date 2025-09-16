@@ -193,7 +193,7 @@ upload_artifacts() {
         REPO_NAME=$(basename "$(pwd)")
     fi
 
-    S3_PREFIX="/${REPO_NAME}/${version}/"
+    S3_PREFIX="/${REPO_NAME}/${version}"
 
     log_info "S3 prefix: $S3_PREFIX"
 
@@ -202,13 +202,14 @@ upload_artifacts() {
 
     for lambda_dir in $LAMBDA_DIRS; do
         LAMBDA_NAME=$(basename "$lambda_dir")
-        log_info "Uploading $LAMBDA_NAME/bootstrap.zip..."
-        aws s3 cp "${lambda_dir}/bootstrap.zip" "${S3_PREFIX}${LAMBDA_NAME}.zip"
+        log_info "Uploading $LAMBDA_NAME..."
+        log_info "aws s3 cp ${lambda_dir}/bootstrap.zip s3://${S3_ARTIFACT_BUCKET}/${S3_PREFIX}/${LAMBDA_NAME}.zip"
+        aws s3 cp "${lambda_dir}/bootstrap.zip" "s3://${S3_ARTIFACT_BUCKET}/${S3_PREFIX}/${LAMBDA_NAME}.zip"
     done
 
     # Upload CloudFormation template
     log_info "Uploading CloudFormation template..."
-    aws s3 cp "$CLOUDFORMATION_TEMPLATE" "${S3_PREFIX}cloudformation.template"
+    aws s3 cp "$CLOUDFORMATION_TEMPLATE" "s3://${S3_ARTIFACT_BUCKET}/${S3_PREFIX}/cloudformation.template"
 
     # Create and upload CloudFormation parameters
     echo -e "${YELLOW}Creating CloudFormation parameters file...${NC}"
@@ -242,7 +243,7 @@ EOF
 
     # Upload parameters file (this triggers deployment)
     log_info "Uploading parameters file (this will trigger deployment)..."
-    aws s3 cp cloudformation-params.json "s3://${S3_ARTIFACT_BUCKET}/${S3_PREFIX}cloudformation-params.json"
+    aws s3 cp cloudformation-params.json "s3://${S3_ARTIFACT_BUCKET}/${S3_PREFIX}/cloudformation-params.json"
 
     # Clean up local parameters file
     rm cloudformation-params.json
