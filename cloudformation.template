@@ -6,6 +6,15 @@ Parameters:
     Type: String
     Default: prd
     Description: Environment name for the resources
+  S3BucketName:
+    Type: String
+    Description: S3 bucket containing all deployment artifacts
+  S3KeyPrefix:
+    Type: String
+    Description: S3 key prefix for deployment artifacts (e.g., site-letmevibethatforyou/1.0.0)
+  Version:
+    Type: String
+    Description: Version string for deployment packages (e.g., 20240102-1430)
 
 Resources:
   AlgoliaTable:
