@@ -211,13 +211,26 @@ upload_artifacts() {
     aws s3 cp "$CLOUDFORMATION_TEMPLATE" "${S3_PREFIX}cloudformation.template"
 
     # Create and upload CloudFormation parameters
-    log_info "Creating CloudFormation parameters..."
-    cat > cloudformation-params.json << EOF
-{
-  "Version": "${version}",
-  "Env": "${env}",
-  "S3Prefix": "${S3_PREFIX}"
-}
+    echo -e "${YELLOW}Creating CloudFormation parameters file...${NC}"
+    cat > "${ROOT}/cloudformation-params.json" << EOF
+[
+  {
+    "ParameterKey": "S3BucketName",
+    "ParameterValue": "${S3_ARTIFACT_BUCKET}"
+  },
+  {
+    "ParameterKey": "S3KeyPrefix",
+    "ParameterValue": "${S3_PREFIX}"
+  },
+  {
+    "ParameterKey": "Version",
+    "ParameterValue": "${version}"
+  }
+  {
+    "ParameterKey": "Env",
+    "ParameterValue": "${env}"
+  }
+]
 EOF
 
     log_info "Generated parameters:"
