@@ -242,7 +242,7 @@ EOF
 
     # Upload parameters file (this triggers deployment)
     log_info "Uploading parameters file (this will trigger deployment)..."
-    aws s3 cp cloudformation-params.json "${S3_PREFIX}cloudformation-params.json"
+    aws s3 cp cloudformation-params.json "s3://${S3_ARTIFACT_BUCKET}/${S3_PREFIX}cloudformation-params.json"
 
     # Clean up local parameters file
     rm cloudformation-params.json
@@ -250,7 +250,7 @@ EOF
     log_info "Deployment triggered successfully!"
     log_info "Version: $version"
     log_info "Environment: $env"
-    log_info "Artifacts location: $S3_PREFIX"
+    log_info "Artifacts location: s3://${S3_ARTIFACT_BUCKET}/${S3_PREFIX}"
 }
 
 main() {
