@@ -241,6 +241,10 @@ upload_artifacts() {
   {
     "ParameterKey": "AlgoliaSecretArn",
     "ParameterValue": "${ALGOLIA_SECRET_ARN:=}"
+  },
+  {
+    "ParameterKey": "Repository",
+    "ParameterValue": "${REPO_NAME:=}"
   }
 ]
 EOF

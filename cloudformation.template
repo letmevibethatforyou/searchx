@@ -6,6 +6,9 @@ Parameters:
     Type: String
     Default: prd
     Description: Environment name for the resources
+  Repository:
+    Type: String
+    Description: Code repository (e.g., github.com/username/repo)
   S3BucketName:
     Type: String
     Description: S3 bucket containing all deployment artifacts
@@ -22,10 +25,8 @@ Parameters:
 Resources:
   AlgoliaTable:
     Type: AWS::DynamoDB::Table
-    DeletionPolicy: Retain
-    UpdateReplacePolicy: Retain
     Properties:
-      TableName: AlgoliaTable
+      TableName: !Sub '${Env}-${Repository}--algolia'
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
         - AttributeName: pk
@@ -92,7 +93,7 @@ Resources:
   TriggerAlgoliaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub '${Env}-trigger-algolia'
+      FunctionName: !Sub '${Env}-${Repository}--trigger-algolia'
       Runtime: provided.al2023
       Handler: bootstrap
       Role: !GetAtt TriggerAlgoliaFunctionRole.Arn
