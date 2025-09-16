@@ -15,6 +15,9 @@ Parameters:
   Version:
     Type: String
     Description: Version string for deployment packages (e.g., 20240102-1430)
+  AlgoliaSecretArn:
+    Type: String
+    Description: ARN of the AWS Secrets Manager secret containing Algolia credentials
 
 Resources:
   AlgoliaTable:
@@ -40,11 +43,83 @@ Resources:
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: true
       DeletionProtectionEnabled: true
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
       Tags:
         - Key: Name
           Value: AlgoliaTable
         - Key: Environment
           Value: !Ref Env
+
+  TriggerAlgoliaFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: DynamoDBStreamAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:DescribeStream
+                  - dynamodb:GetRecords
+                  - dynamodb:GetShardIterator
+                  - dynamodb:ListStreams
+                Resource: !GetAtt AlgoliaTable.StreamArn
+        - PolicyName: SecretsManagerAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - secretsmanager:GetSecretValue
+                Resource: !Ref AlgoliaSecretArn
+      Tags:
+        - Key: Name
+          Value: TriggerAlgoliaFunctionRole
+        - Key: Environment
+          Value: !Ref Env
+
+  TriggerAlgoliaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub '${Env}-trigger-algolia'
+      Runtime: provided.al2023
+      Handler: bootstrap
+      Role: !GetAtt TriggerAlgoliaFunctionRole.Arn
+      Code:
+        S3Bucket: !Ref S3BucketName
+        S3Key: !Sub '${S3KeyPrefix}trigger-algolia.zip'
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref AlgoliaTable
+          ALGOLIA_SECRET_ARN: !Ref AlgoliaSecretArn
+      Timeout: 60
+      MemorySize: 128
+      Tags:
+        - Key: Name
+          Value: !Sub '${Env}-trigger-algolia'
+        - Key: Environment
+          Value: !Ref Env
+
+  TriggerAlgoliaEventSourceMapping:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      EventSourceArn: !GetAtt AlgoliaTable.StreamArn
+      FunctionName: !Ref TriggerAlgoliaFunction
+      StartingPosition: TRIM_HORIZON
+      BatchSize: 10
+      MaximumBatchingWindowInSeconds: 5
+      ParallelizationFactor: 1
 
 Outputs:
   TableName:
@@ -57,3 +132,13 @@ Outputs:
     Value: !GetAtt AlgoliaTable.Arn
     Export:
       Name: !Sub '${AWS::StackName}-AlgoliaTableArn'
+  TableStreamArn:
+    Description: ARN of the DynamoDB table stream
+    Value: !GetAtt AlgoliaTable.StreamArn
+    Export:
+      Name: !Sub '${AWS::StackName}-AlgoliaTableStreamArn'
+  TriggerAlgoliaFunctionArn:
+    Description: ARN of the trigger-algolia Lambda function
+    Value: !GetAtt TriggerAlgoliaFunction.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-TriggerAlgoliaFunctionArn'

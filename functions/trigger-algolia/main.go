@@ -2,10 +2,13 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"os"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
 	"github.com/letmevibethatforyou/searchx/algolia"
 	"github.com/letmevibethatforyou/searchx/internal/ddb"
 	"github.com/urfave/cli/v2"
@@ -130,6 +133,11 @@ func main() {
 				Usage:   "Algolia API key",
 				EnvVars: []string{"ALGOLIA_API_KEY"},
 			},
+			&cli.StringFlag{
+				Name:    "algolia-secret-arn",
+				Usage:   "ARN of AWS Secrets Manager secret containing Algolia credentials",
+				EnvVars: []string{"ALGOLIA_SECRET_ARN"},
+			},
 		},
 		Action: runAction,
 	}
@@ -145,11 +153,21 @@ func runAction(c *cli.Context) error {
 	tableName := c.String("table-name")
 	algoliaAppID := c.String("algolia-app-id")
 	algoliaAPIKey := c.String("algolia-api-key")
+	algoliaSecretArn := c.String("algolia-secret-arn")
 
 	slog.InfoContext(ctx, "Starting DynamoDB to Algolia sync", "table", tableName)
 
 	var fetchSecrets algolia.FetchSecrets
-	if algoliaAppID != "" && algoliaAPIKey != "" {
+	if algoliaSecretArn != "" {
+		// Use AWS Secrets Manager
+		slog.InfoContext(ctx, "Using AWS Secrets Manager for Algolia credentials", "secret_arn", algoliaSecretArn)
+		cfg, err := config.LoadDefaultConfig(ctx)
+		if err != nil {
+			return fmt.Errorf("failed to load AWS config: %w", err)
+		}
+		secretsClient := secretsmanager.NewFromConfig(cfg)
+		fetchSecrets = algolia.AWSSecretsFromARN(ctx, secretsClient, algoliaSecretArn)
+	} else if algoliaAppID != "" && algoliaAPIKey != "" {
 		fetchSecrets = algolia.StaticSecrets(algoliaAppID, algoliaAPIKey)
 	} else {
 		fetchSecrets = algolia.EnvSecrets()
