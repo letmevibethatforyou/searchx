@@ -98,7 +98,7 @@ Resources:
       Role: !GetAtt TriggerAlgoliaFunctionRole.Arn
       Code:
         S3Bucket: !Ref S3BucketName
-        S3Key: !Sub '${S3KeyPrefix}/bootstrap.zip.zip'
+        S3Key: !Sub '${S3KeyPrefix}/trigger-algolia.zip'
       Environment:
         Variables:
           TABLE_NAME: !Ref AlgoliaTable
