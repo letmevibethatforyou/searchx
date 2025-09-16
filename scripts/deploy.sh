@@ -193,7 +193,7 @@ upload_artifacts() {
         REPO_NAME=$(basename "$(pwd)")
     fi
 
-    S3_PREFIX="s3://${bucket}/${REPO_NAME}/${version}/"
+    S3_PREFIX="/${REPO_NAME}/${version}/"
 
     log_info "S3 prefix: $S3_PREFIX"
 
