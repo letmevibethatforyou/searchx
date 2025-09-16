@@ -82,7 +82,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - secretsmanager:GetSecretValue
-                Resource: !Ref AlgoliaSecretArn
+                Resource: !Sub 'arn:aws:secretsmanager:${AWS::Region}:${AWS::Account}:secret:${Env}/algolia*'
       Tags:
         - Key: Name
           Value: TriggerAlgoliaFunctionRole
