@@ -212,7 +212,7 @@ upload_artifacts() {
 
     # Create and upload CloudFormation parameters
     echo -e "${YELLOW}Creating CloudFormation parameters file...${NC}"
-    cat > "${ROOT}/cloudformation-params.json" << EOF
+    cat > cloudformation-params.json << EOF
 [
   {
     "ParameterKey": "S3BucketName",
