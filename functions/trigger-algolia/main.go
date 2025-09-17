@@ -113,6 +113,11 @@ func (h *Handler) handleDelete(ctx context.Context, indexName, objectID string) 
 }
 
 func main() {
+	// Configure JSON logging for AWS environments
+	if os.Getenv("AWS_LAMBDA_RUNTIME_API") != "" || os.Getenv("AWS_REGION") != "" {
+		slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
+	}
+
 	app := &cli.App{
 		Name:  "dynamodb-algolia-sync",
 		Usage: "Sync DynamoDB stream events to Algolia",
