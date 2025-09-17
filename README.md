@@ -104,11 +104,27 @@ The repository includes AWS Lambda function templates in the `functions/` direct
 
 ### CloudFormation Deployment
 
-Deploy SearchX infrastructure using the included CloudFormation template:
+Deploy SearchX infrastructure using the included CloudFormation template and Makefile:
 
 ```bash
+# Using the deploy script directly
 ./scripts/deploy.sh
+
+# Using the Makefile (recommended)
+make deploy ENV=prod S3_ARTIFACT_BUCKET=my-artifacts-bucket
+
+# Other useful Makefile targets
+make validate    # Validate CloudFormation template
+make test       # Run tests only
+make build      # Build Lambda functions locally
+make clean      # Clean build artifacts
+make help       # Show all available targets
 ```
+
+Required environment variables for deployment:
+- `ENV`: Environment name (e.g., dev, staging, prod)
+- `S3_ARTIFACT_BUCKET`: S3 bucket for deployment artifacts
+- `AWS_REGION`: AWS region (default: us-east-1)
 
 The template creates:
 - DynamoDB table for data storage
