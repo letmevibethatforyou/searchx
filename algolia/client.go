@@ -16,8 +16,8 @@ import (
 
 // Secrets holds the Algolia application credentials.
 type Secrets struct {
-	// AppID is the Algolia application ID.
-	AppID string `json:"app_id"`
+	// ApplicationID is the Algolia application ID.
+	ApplicationID string `json:"application_id"`
 	// WriteApiKey is the Algolia write API key.
 	WriteApiKey string `json:"write_api_key"`
 }
@@ -31,8 +31,8 @@ type FetchSecrets func() (Secrets, error)
 func StaticSecrets(appID, writeApiKey string) FetchSecrets {
 	return func() (Secrets, error) {
 		return Secrets{
-			AppID:       appID,
-			WriteApiKey: writeApiKey,
+			ApplicationID: appID,
+			WriteApiKey:   writeApiKey,
 		}, nil
 	}
 }
@@ -50,8 +50,8 @@ func EnvSecrets() FetchSecrets {
 		}
 
 		return Secrets{
-			AppID:       appID,
-			WriteApiKey: apiKey,
+			ApplicationID: appID,
+			WriteApiKey:   apiKey,
 		}, nil
 	}
 }
@@ -68,15 +68,15 @@ func NewClient(fetchSecrets FetchSecrets) *Client {
 			return nil, fmt.Errorf("failed to fetch secrets: %w", err)
 		}
 
-		if secrets.AppID == "" {
-			return nil, fmt.Errorf("AppID is empty")
+		if secrets.ApplicationID == "" {
+			return nil, fmt.Errorf("ApplicationID is empty")
 		}
 
 		if secrets.WriteApiKey == "" {
 			return nil, fmt.Errorf("WriteApiKey is empty")
 		}
 
-		client := search.NewClient(secrets.AppID, secrets.WriteApiKey)
+		client := search.NewClient(secrets.ApplicationID, secrets.WriteApiKey)
 		return client, nil
 	})
 

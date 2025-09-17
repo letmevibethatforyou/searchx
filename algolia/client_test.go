@@ -19,8 +19,8 @@ func TestStaticSecrets(t *testing.T) {
 		t.Errorf("StaticSecrets should not return error, got: %v", err)
 	}
 
-	if secrets.AppID != appID {
-		t.Errorf("Expected AppID %s, got %s", appID, secrets.AppID)
+	if secrets.ApplicationID != appID {
+		t.Errorf("Expected ApplicationID %s, got %s", appID, secrets.ApplicationID)
 	}
 
 	if secrets.WriteApiKey != apiKey {
@@ -78,8 +78,8 @@ func TestEnvSecrets(t *testing.T) {
 				if err != nil {
 					t.Errorf("Expected no error but got: %v", err)
 				}
-				if secrets.AppID != tt.appID {
-					t.Errorf("Expected AppID %s, got %s", tt.appID, secrets.AppID)
+				if secrets.ApplicationID != tt.appID {
+					t.Errorf("Expected ApplicationID %s, got %s", tt.appID, secrets.ApplicationID)
 				}
 				if secrets.WriteApiKey != tt.apiKey {
 					t.Errorf("Expected WriteApiKey %s, got %s", tt.apiKey, secrets.WriteApiKey)
@@ -146,8 +146,8 @@ func TestClientLazyInitialization(t *testing.T) {
 	fetchSecrets := func() (Secrets, error) {
 		callCount++
 		return Secrets{
-			AppID:       "test-app",
-			WriteApiKey: "test-key",
+			ApplicationID: "test-app",
+			WriteApiKey:   "test-key",
 		}, nil
 	}
 
@@ -225,8 +225,8 @@ func TestClientConcurrentAccess(t *testing.T) {
 		time.Sleep(10 * time.Millisecond)
 
 		return Secrets{
-			AppID:       "test-app",
-			WriteApiKey: "test-key",
+			ApplicationID: "test-app",
+			WriteApiKey:   "test-key",
 		}, nil
 	}
 

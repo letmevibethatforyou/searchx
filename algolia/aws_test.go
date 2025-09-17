@@ -28,7 +28,7 @@ func (m *mockSecretsManagerClient) GetSecretValue(ctx context.Context, params *s
 func TestAWSSecrets_Success(t *testing.T) {
 	ctx := context.Background()
 	env := "production"
-	secretJSON := `{"app_id":"test-app-id","write_api_key":"test-api-key"}`
+	secretJSON := `{"application_id":"test-app-id","write_api_key":"test-api-key"}`
 
 	client := &mockSecretsManagerClient{
 		secretValue: aws.String(secretJSON),
@@ -41,8 +41,8 @@ func TestAWSSecrets_Success(t *testing.T) {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 
-	if secrets.AppID != "test-app-id" {
-		t.Errorf("Expected AppID to be 'test-app-id', got '%s'", secrets.AppID)
+	if secrets.ApplicationID != "test-app-id" {
+		t.Errorf("Expected ApplicationID to be 'test-app-id', got '%s'", secrets.ApplicationID)
 	}
 
 	if secrets.WriteApiKey != "test-api-key" {
@@ -95,7 +95,7 @@ func TestAWSSecrets_NilSecretString(t *testing.T) {
 func TestAWSSecrets_InvalidJSON(t *testing.T) {
 	ctx := context.Background()
 	env := "production"
-	invalidJSON := `{"app_id":"test-app-id","write_api_key":}`
+	invalidJSON := `{"application_id":"test-app-id","write_api_key":}`
 
 	client := &mockSecretsManagerClient{
 		secretValue: aws.String(invalidJSON),
@@ -117,7 +117,7 @@ func TestAWSSecrets_InvalidJSON(t *testing.T) {
 func TestAWSSecrets_EnvironmentPath(t *testing.T) {
 	ctx := context.Background()
 	env := "staging"
-	secretJSON := `{"app_id":"staging-app-id","write_api_key":"staging-api-key"}`
+	secretJSON := `{"application_id":"staging-app-id","write_api_key":"staging-api-key"}`
 
 	client := &mockSecretsManagerClient{
 		secretValue: aws.String(secretJSON),
@@ -130,8 +130,8 @@ func TestAWSSecrets_EnvironmentPath(t *testing.T) {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 
-	if secrets.AppID != "staging-app-id" {
-		t.Errorf("Expected AppID to be 'staging-app-id', got '%s'", secrets.AppID)
+	if secrets.ApplicationID != "staging-app-id" {
+		t.Errorf("Expected ApplicationID to be 'staging-app-id', got '%s'", secrets.ApplicationID)
 	}
 
 	if secrets.WriteApiKey != "staging-api-key" {

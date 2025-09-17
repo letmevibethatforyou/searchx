@@ -451,7 +451,7 @@ func TestErrorCodeUsage(t *testing.T) {
 			name: "empty credentials",
 			setupClient: func() *Client {
 				fetchSecrets := func() (Secrets, error) {
-					return Secrets{AppID: "", WriteApiKey: ""}, nil
+					return Secrets{ApplicationID: "", WriteApiKey: ""}, nil
 				}
 				return NewClient(fetchSecrets)
 			},
